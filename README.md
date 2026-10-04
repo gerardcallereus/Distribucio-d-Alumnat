@@ -1,37 +1,31 @@
-# Distribució d'Alumnat a l'Aula 🪑
+# Distribució d'Alumnat i Grups de Treball 🪑🤝
 
-Aplicació web dissenyada per a docents que permet organitzar i repartir alumnes en taules de forma equitativa i automàtica.
+Aplicació web per a docents que permet gestionar la col·locació a l'aula i crear grups de treball de forma equitativa i participativa.
 
-## Característiques
+## Funcionalitats
 
-- **Configuració de l'aula**:
-  - Nombre de taules configurables amb selectors incrementals (+ / -).
-  - Capacitat màxima d'alumnes per taula.
-  - Càlcul dinàmic de la capacitat total de l'aula en temps real.
-- **Entrada d'alumnat**:
-  - Àrea de text amb un alumne per línia.
-  - Comptador automàtic d'alumnes introduïts.
-  - Botó per ordenar alfabèticament la llista (A-Z).
-  - Botó per buidar la llista.
-  - Botó per carregar dades d'exemple ràpides.
-- **Algorisme de repartiment equitatiu**:
-  - Distribueix l'alumnat garantint que cap taula difereixi en més d'un alumne respecte de les altres.
-  - Respecta la capacitat màxima de cada taula.
-  - Alerta immediata en cas que el nombre d'alumnes superi la capacitat màxima total, indicant quins alumnes queden sense taula.
-  - Dos modes d'assignació:
-    - **🎲 Aleatori**: Barreja a l'atzar l'alumnat (Fisher-Yates).
-    - **📝 Ordre de llista**: Respecta l'ordre original d'entrada.
-- **Eines addicionals**:
-  - 🔄 **Remenar**: Torna a generar una nova combinació a l'atzar amb un sol clic.
-  - 📋 **Copiar**: Copia el resum de totes les taules directament al portapapers.
-  - 🖨️ **Imprimir / PDF**: Estils CSS preparats per imprimir directament o desar en PDF net per portar a l'aula.
+### 1. 🪑 Taules d'Aula (Distribució física)
+- Distribució equitativa de l'alumnat a les taules de classe.
+- Control de capacitat màxima per taula i avís en temps real en cas d'excedir el límit.
+- Repartiment **Aleatori** o per **Ordre d'entrada**.
+- Eines per remenar, ordenar alfabèticament, copiar el resultat al portapapers i imprimir.
+
+### 2. 🤝 Grups de Treball (Metodologia de Veto i Consens)
+- Metodologia participativa d'aula amb **Dret a Veto Únic**:
+  - Els alumnes es reparteixen de manera equitativa en grups de treball inicials (**Provisionals ⏳**).
+  - Cada alumne disposa de **només 1 vot de desacord** durant tota la sessió.
+  - Si un alumne prem **"✋ En desacord"**, el seu veto queda consumit (ja no pot tornar a votar en contra) i **tot el grup queda impugnat ❌**.
+  - En prémer **"🔄 Redistribuir impugnats"**, els membres dels grups impugnats tornen a entrar en una bossa de repartiment aleatori exclusiva per a aquests grups.
+  - Els grups que no tenen queixes es poden validar com a **Definitius 🔒** per consens.
+  - **Regla automàtica de tancament**: Si un grup es forma amb membres que **tots ja han exercit el seu veto anteriorment**, el grup esdevé automàticament **Definitiu 🔒** (ja ningú té dret a vetar-lo).
+  - El procés es completa quan tots els grups assoleixen l'estat definitiu.
 
 ## Com executar localment
 
-L'aplicació està activa a:
+L'aplicació està disponible a:
 **[http://localhost:3000](http://localhost:3000)**
 
-Si vols tornar a arrencar el servidor:
+Per engegar manualment el servidor web:
 ```bash
 python3 -m http.server 3000
 ```

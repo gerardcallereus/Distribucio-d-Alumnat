@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Distribució d'Alumnat a l'Aula</title>
+  <title>Distribució d'Alumnat i Grups de Treball</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,174 +18,330 @@
           <div class="logo-icon">🪑</div>
           <div>
             <h1>Distribució d'Alumnat</h1>
-            <p class="subtitle">Organitza i reparteix l'alumnat de forma equitativa a les taules de la teva aula</p>
+            <p class="subtitle">Eines per a docents: organització de taules d'aula i grups de treball amb consens</p>
           </div>
         </div>
         <div class="header-actions">
           <button id="btn-example" class="btn btn-secondary btn-sm" title="Carrega una llista d'exemple">
-            <span class="icon">✨</span> Carregar dades d'exemple
+            <span class="icon">✨</span> Carregar alumnes d'exemple
           </button>
         </div>
       </div>
+
+      <!-- Barra de navegació per Pestanyes -->
+      <nav class="tabs-nav" aria-label="Navegació de pestanyes">
+        <button type="button" class="tab-btn active" id="tab-btn-tables" data-target="tab-tables">
+          <span class="tab-icon">🪑</span>
+          <span class="tab-label">Taules d'Aula</span>
+        </button>
+        <button type="button" class="tab-btn" id="tab-btn-groups" data-target="tab-groups">
+          <span class="tab-icon">🤝</span>
+          <span class="tab-label">Grups de Treball (amb Veto)</span>
+          <span class="badge-feature">Nou</span>
+        </button>
+      </nav>
     </header>
 
-    <!-- Contingut principal: Formulari + Resultats -->
-    <main class="main-layout">
-      <!-- Panell de configuració i entrada -->
-      <aside class="panel config-panel">
-        <h2 class="panel-title"><span class="step-badge">1</span> Paràmetres de l'aula</h2>
-        
-        <form id="distribution-form" onsubmit="return false;">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="num-tables">
-                <span>Nombre de taules</span>
-                <span class="tooltip" title="Quantes taules o grups hi ha a l'aula?">ℹ️</span>
-              </label>
-              <div class="input-with-stepper">
-                <button type="button" class="stepper-btn" onclick="stepValue('num-tables', -1)">−</button>
-                <input type="number" id="num-tables" min="1" max="50" value="5" required>
-                <button type="button" class="stepper-btn" onclick="stepValue('num-tables', 1)">+</button>
+    <!-- ========================================== -->
+    <!-- PESTANYA 1: TAULES D'AULA (Eina clàssica)   -->
+    <!-- ========================================== -->
+    <main class="tab-content active" id="tab-tables">
+      <div class="main-layout">
+        <!-- Panell de configuració i entrada -->
+        <aside class="panel config-panel">
+          <h2 class="panel-title"><span class="step-badge">1</span> Paràmetres de l'aula</h2>
+          
+          <form id="distribution-form" onsubmit="return false;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="num-tables">
+                  <span>Nombre de taules</span>
+                  <span class="tooltip" title="Quantes taules o grups hi ha a l'aula?">ℹ️</span>
+                </label>
+                <div class="input-with-stepper">
+                  <button type="button" class="stepper-btn" onclick="stepValue('num-tables', -1)">−</button>
+                  <input type="number" id="num-tables" min="1" max="50" value="5" required>
+                  <button type="button" class="stepper-btn" onclick="stepValue('num-tables', 1)">+</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="max-per-table">
+                  <span>Màx. alumnes per taula</span>
+                  <span class="tooltip" title="Capacitat màxima d'alumnes per taula">ℹ️</span>
+                </label>
+                <div class="input-with-stepper">
+                  <button type="button" class="stepper-btn" onclick="stepValue('max-per-table', -1)">−</button>
+                  <input type="number" id="max-per-table" min="1" max="25" value="5" required>
+                  <button type="button" class="stepper-btn" onclick="stepValue('max-per-table', 1)">+</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="capacity-info-box" id="capacity-summary">
+              <div class="info-item">
+                <span class="info-label">Capacitat total de l'aula:</span>
+                <span class="info-val" id="total-capacity-val">25 places</span>
+              </div>
+              <div class="info-sub" id="capacity-feedback-hint">
+                5 taules × 5 alumnes màxim
               </div>
             </div>
 
             <div class="form-group">
-              <label for="max-per-table">
-                <span>Màx. alumnes per taula</span>
-                <span class="tooltip" title="Capacitat màxima d'alumnes per taula">ℹ️</span>
-              </label>
-              <div class="input-with-stepper">
-                <button type="button" class="stepper-btn" onclick="stepValue('max-per-table', -1)">−</button>
-                <input type="number" id="max-per-table" min="1" max="25" value="5" required>
-                <button type="button" class="stepper-btn" onclick="stepValue('max-per-table', 1)">+</button>
+              <div class="label-with-count">
+                <label for="students-input">
+                  <span class="step-badge">2</span> Llista d'alumnes (un per línia)
+                </label>
+                <span class="students-counter" id="students-count-badge">0 alumnes</span>
+              </div>
+              <textarea 
+                id="students-input" 
+                placeholder="Enganxa o escriu aquí els noms dels alumnes...&#10;Exemple:&#10;Marc Garcia&#10;Júlia Puig&#10;Pol Martí&#10;Laia Soler" 
+                rows="10"
+                spellcheck="false"
+              ></textarea>
+              <div class="textarea-footer">
+                <button type="button" id="btn-sync-to-groups" class="text-link-btn" title="Copia aquests alumnes a la pestanya de grups">Copiar a Grups ➔</button>
+                <button type="button" id="btn-clear-students" class="text-link-btn">Buidar llista</button>
+                <button type="button" id="btn-sort-students" class="text-link-btn">Ordenar A-Z</button>
               </div>
             </div>
-          </div>
 
-          <div class="capacity-info-box" id="capacity-summary">
-            <div class="info-item">
-              <span class="info-label">Capacitat total de l'aula:</span>
-              <span class="info-val" id="total-capacity-val">25 places</span>
-            </div>
-            <div class="info-sub" id="capacity-feedback-hint">
-              5 taules × 5 alumnes màxim
-            </div>
-          </div>
-
-          <div class="form-group">
-            <div class="label-with-count">
-              <label for="students-input">
-                <span class="step-badge">2</span> Llista d'alumnes (un per línia)
-              </label>
-              <span class="students-counter" id="students-count-badge">0 alumnes</span>
-            </div>
-            <textarea 
-              id="students-input" 
-              placeholder="Enganxa o escriu aquí els noms dels alumnes...&#10;Exemple:&#10;Marc Garcia&#10;Júlia Puig&#10;Pol Martí&#10;Laia Soler" 
-              rows="10"
-              spellcheck="false"
-            ></textarea>
-            <div class="textarea-footer">
-              <button type="button" id="btn-clear-students" class="text-link-btn">Buidar llista</button>
-              <button type="button" id="btn-sort-students" class="text-link-btn">Ordenar A-Z</button>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="section-sublabel">Mètode d'assignació</label>
-            <div class="radio-cards">
-              <label class="radio-card">
-                <input type="radio" name="dist-mode" value="random" checked>
-                <span class="card-pill">
-                  <span class="radio-icon">🎲</span>
-                  <span class="radio-text">
-                    <strong>Aleatori</strong>
-                    <small>Mescla i reparteix a l'atzar</small>
+            <div class="form-group">
+              <label class="section-sublabel">Mètode d'assignació</label>
+              <div class="radio-cards">
+                <label class="radio-card">
+                  <input type="radio" name="dist-mode" value="random" checked>
+                  <span class="card-pill">
+                    <span class="radio-icon">🎲</span>
+                    <span class="radio-text">
+                      <strong>Aleatori</strong>
+                      <small>Mescla i reparteix a l'atzar</small>
+                    </span>
                   </span>
-                </span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="dist-mode" value="order">
-                <span class="card-pill">
-                  <span class="radio-icon">📝</span>
-                  <span class="radio-text">
-                    <strong>Ordre de la llista</strong>
-                    <small>Conserva l'ordre introduït</small>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="dist-mode" value="order">
+                  <span class="card-pill">
+                    <span class="radio-icon">📝</span>
+                    <span class="radio-text">
+                      <strong>Ordre de la llista</strong>
+                      <small>Conserva l'ordre introduït</small>
+                    </span>
                   </span>
-                </span>
-              </label>
+                </label>
+              </div>
+            </div>
+
+            <div class="action-buttons">
+              <button type="button" id="btn-distribute" class="btn btn-primary btn-lg">
+                <span>⚡ Distribuir Alumnat a les Taules</span>
+              </button>
+            </div>
+          </form>
+        </aside>
+
+        <!-- Panell de Resultats de les Taules -->
+        <section class="panel results-panel" id="results-section">
+          <div class="results-header">
+            <div>
+              <h2 class="panel-title">
+                <span>Distribució de les taules</span>
+                <span class="badge" id="distribution-status-badge">A punt</span>
+              </h2>
+              <p class="panel-desc" id="results-meta-text">Defineix els paràmetres i fes clic a "Distribuir Alumnat a les Taules"</p>
+            </div>
+            <div class="results-toolbar" id="results-toolbar" style="display: none;">
+              <button id="btn-reshuffle" class="btn btn-outline btn-sm" title="Tornar a barrejar l'alumnat">
+                🔄 Remenar
+              </button>
+              <button id="btn-copy" class="btn btn-outline btn-sm" title="Copiar resum al portapapers">
+                📋 Copiar
+              </button>
+              <button id="btn-print" class="btn btn-outline btn-sm" title="Imprimir o desar en PDF">
+                🖨️ Imprimir / PDF
+              </button>
             </div>
           </div>
 
-          <div class="action-buttons">
-            <button type="button" id="btn-distribute" class="btn btn-primary btn-lg">
-              <span>⚡ Distribuir Alumnat</span>
-            </button>
-          </div>
-        </form>
-      </aside>
+          <!-- Alerta d'estat -->
+          <div id="status-alert" class="alert" style="display: none;"></div>
 
-      <!-- Panell de Resultats de la Distribució -->
-      <section class="panel results-panel" id="results-section">
-        <div class="results-header">
-          <div>
-            <h2 class="panel-title">
-              <span>Distribució de les taules</span>
-              <span class="badge" id="distribution-status-badge">A punt</span>
-            </h2>
-            <p class="panel-desc" id="results-meta-text">Defineix els paràmetres i fes clic a "Distribuir Alumnat"</p>
+          <!-- Targetes de resum ràpid -->
+          <div class="stats-grid" id="stats-grid" style="display: none;">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-total-students">0</div>
+              <div class="stat-label">Alumnes assignats</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-total-tables">0</div>
+              <div class="stat-label">Taules ocupades</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-avg-students">-</div>
+              <div class="stat-label">Alumnes per taula</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-free-seats">0</div>
+              <div class="stat-label">Cadires buides</div>
+            </div>
           </div>
-          <div class="results-toolbar" id="results-toolbar" style="display: none;">
-            <button id="btn-reshuffle" class="btn btn-outline btn-sm" title="Tornar a barrejar l'alumnat">
-              🔄 Remenar
-            </button>
-            <button id="btn-copy" class="btn btn-outline btn-sm" title="Copiar resum al portapapers">
-              📋 Copiar
-            </button>
-            <button id="btn-print" class="btn btn-outline btn-sm" title="Imprimir o desar en PDF">
-              🖨️ Imprimir / PDF
-            </button>
-          </div>
-        </div>
 
-        <!-- Alerta d'estat (error de capacitat o informació) -->
-        <div id="status-alert" class="alert" style="display: none;"></div>
+          <!-- Graella de Taules -->
+          <div class="tables-grid" id="tables-container">
+            <div class="empty-state" id="empty-state">
+              <div class="empty-icon">👥</div>
+              <h3>Cap distribució calculada encara</h3>
+              <p>Introdueix els alumnes i fes clic al botó per generar la distribució automàtica.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
 
-        <!-- Targetes de resum ràpid -->
-        <div class="stats-grid" id="stats-grid" style="display: none;">
-          <div class="stat-card">
-            <div class="stat-num" id="stat-total-students">0</div>
-            <div class="stat-label">Alumnes assignats</div>
+    <!-- ======================================================== -->
+    <!-- PESTANYA 2: GRUPS DE TREBALL (Metodologia de Veto/Desacord)-->
+    <!-- ======================================================== -->
+    <main class="tab-content" id="tab-groups">
+      <div class="main-layout">
+        <!-- Configuració de Grups -->
+        <aside class="panel config-panel">
+          <div class="panel-header-with-badge">
+            <h2 class="panel-title"><span class="step-badge">1</span> Grups de Treball</h2>
+            <span class="badge info">Consens i Veto</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-num" id="stat-total-tables">0</div>
-            <div class="stat-label">Taules ocupades</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num" id="stat-avg-students">-</div>
-            <div class="stat-label">Alumnes per taula</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num" id="stat-free-seats">0</div>
-            <div class="stat-label">Cadires buides</div>
-          </div>
-        </div>
 
-        <!-- Graella de Taules -->
-        <div class="tables-grid" id="tables-container">
-          <!-- Estat buit inicial -->
-          <div class="empty-state" id="empty-state">
-            <div class="empty-icon">👥</div>
-            <h3>Cap distribució calculada encara</h3>
-            <p>Introdueix els alumnes i fes clic al botó per generar la distribució automàtica.</p>
+          <div class="methodology-banner">
+            <div class="banner-title">💡 Com funciona aquesta metodologia?</div>
+            <ul class="methodology-list">
+              <li>Cada alumne disposa d'<strong>1 sol vot de desacord (veto)</strong>.</li>
+              <li>Si un alumne vota en contra, <strong>tot el grup es dissol</strong> i es redistribueix aleatòriament.</li>
+              <li>L'alumne que s'ha queixat ja no pot tornar a votar en contra.</li>
+              <li>Si un grup no rep cap queixa, es pot confirmar com a <strong>Grup Definitiu 🔒</strong>.</li>
+              <li>Si un grup es forma amb membres que <strong>tots ja han gastat el seu veto</strong>, esdevé <strong>Definitiu automàticament 🔒</strong>!</li>
+            </ul>
           </div>
-        </div>
-      </section>
+
+          <form id="groups-form" onsubmit="return false;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="num-workgroups">
+                  <span>Nombre de grups</span>
+                  <span class="tooltip" title="En quants grups de treball vols dividir la classe?">ℹ️</span>
+                </label>
+                <div class="input-with-stepper">
+                  <button type="button" class="stepper-btn" onclick="stepValue('num-workgroups', -1)">−</button>
+                  <input type="number" id="num-workgroups" min="2" max="30" value="4" required>
+                  <button type="button" class="stepper-btn" onclick="stepValue('num-workgroups', 1)">+</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="groups-approx-size">
+                  <span>Mida orientativa</span>
+                </label>
+                <div class="input-disabled-preview" id="groups-approx-size">
+                  ~5 alumnes/grup
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="label-with-count">
+                <label for="groups-students-input">
+                  <span class="step-badge">2</span> Llista d'alumnes
+                </label>
+                <span class="students-counter" id="groups-students-count-badge">0 alumnes</span>
+              </div>
+              <textarea 
+                id="groups-students-input" 
+                placeholder="Enganxa aquí els alumnes per als grups de treball..." 
+                rows="8"
+                spellcheck="false"
+              ></textarea>
+              <div class="textarea-footer">
+                <button type="button" id="btn-import-from-tables" class="text-link-btn">Importar de Taules</button>
+                <button type="button" id="btn-groups-clear" class="text-link-btn">Buidar llista</button>
+                <button type="button" id="btn-groups-sort" class="text-link-btn">Ordenar A-Z</button>
+              </div>
+            </div>
+
+            <div class="action-buttons">
+              <button type="button" id="btn-generate-groups" class="btn btn-primary btn-lg">
+                <span>🚀 Generar Grups Inicials</span>
+              </button>
+            </div>
+          </form>
+        </aside>
+
+        <!-- Tauler Dinàmic de Grups i Votacions -->
+        <section class="panel results-panel" id="workgroups-section">
+          <div class="results-header">
+            <div>
+              <h2 class="panel-title">
+                <span>Estat dels Grups de Treball</span>
+                <span class="badge" id="workgroups-status-badge">Pendent d'iniciar</span>
+              </h2>
+              <p class="panel-desc" id="workgroups-meta-text">Genera els grups inicials per començar la ronda de consens i dret a veto.</p>
+            </div>
+            <div class="results-toolbar" id="workgroups-toolbar" style="display: none;">
+              <button id="btn-approve-all-provisionals" class="btn btn-secondary btn-sm" title="Aprovar tots els grups que no tenen queixes">
+                ✅ Confirmar provisionals
+              </button>
+              <button id="btn-redistribute-objected" class="btn btn-primary btn-sm" style="display: none;" title="Redistribuir els grups que han rebut vots en contra">
+                🔄 Redistribuir impugnats (<span id="count-objected-groups">0</span>)
+              </button>
+              <button id="btn-reset-workgroups" class="btn btn-outline btn-sm" title="Reiniciar la sessió des de zero">
+                ⏮️ Reiniciar
+              </button>
+              <button id="btn-copy-workgroups" class="btn btn-outline btn-sm" title="Copiar llista final">
+                📋 Copiar
+              </button>
+              <button id="btn-print-workgroups" class="btn btn-outline btn-sm" title="Imprimir grups">
+                🖨️ Imprimir
+              </button>
+            </div>
+          </div>
+
+          <!-- Alerta informativa / Instruccions de la ronda -->
+          <div id="workgroups-alert" class="alert" style="display: none;"></div>
+
+          <!-- Resum de progrés de vetos i consens -->
+          <div class="stats-grid" id="workgroups-stats-grid" style="display: none;">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-confirmed-groups">0</div>
+              <div class="stat-label">Grups Definitius 🔒</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-provisional-groups">0</div>
+              <div class="stat-label">Grups Provisionals ⏳</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-objected-groups">0</div>
+              <div class="stat-label">Grups Impugnats ❌</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="stat-used-vetoes">0</div>
+              <div class="stat-label">Vetos Gastats ⛔</div>
+            </div>
+          </div>
+
+          <!-- Graella dels Grups -->
+          <div class="tables-grid" id="workgroups-container">
+            <div class="empty-state" id="workgroups-empty-state">
+              <div class="empty-icon">🤝</div>
+              <h3>Cap sessió de grups de treball iniciada</h3>
+              <p>Indica el nombre de grups, els alumnes i fes clic a "Generar Grups Inicials" per engegar la dinàmica.</p>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
 
     <!-- Footer -->
     <footer class="app-footer">
-      <p>Distribució d'Alumnat • Repartiment equitatiu automàtic a l'aula</p>
+      <p>Distribució d'Alumnat i Dinàmiques de Grup • Eina per a la gestió d'aula</p>
     </footer>
   </div>
 

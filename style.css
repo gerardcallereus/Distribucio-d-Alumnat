@@ -5,10 +5,13 @@
   --primary-ring: rgba(79, 70, 229, 0.25);
   
   --success: #10b981;
+  --success-dark: #047857;
   --success-light: #ecfdf5;
   --warning: #f59e0b;
+  --warning-dark: #b45309;
   --warning-light: #fffbeb;
   --danger: #ef4444;
+  --danger-dark: #b91c1c;
   --danger-light: #fef2f2;
   
   --bg-body: #f8fafc;
@@ -56,13 +59,13 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  gap: 24px;
+  gap: 20px;
 }
 
 /* Capçalera */
 .app-header {
   background: var(--bg-card);
-  padding: 20px 28px;
+  padding: 20px 28px 0 28px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
@@ -74,6 +77,7 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
+  padding-bottom: 20px;
 }
 
 .logo-area {
@@ -95,7 +99,7 @@ body {
 }
 
 h1 {
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: var(--text-main);
   letter-spacing: -0.025em;
@@ -104,6 +108,62 @@ h1 {
 .subtitle {
   color: var(--text-muted);
   font-size: 0.88rem;
+}
+
+/* Barra de Pestanyes (Tabs) */
+.tabs-nav {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: var(--primary);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.badge-feature {
+  background: #ede9fe;
+  color: #6d28d9;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+/* Contingut de les pestanyes */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
 }
 
 /* Layout Principal: 2 Columnes */
@@ -129,13 +189,19 @@ h1 {
   padding: 24px;
 }
 
+.panel-header-with-badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
 .panel-title {
   font-size: 1.15rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 6px;
 }
 
 .panel-desc {
@@ -155,6 +221,33 @@ h1 {
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
+}
+
+/* Banner de metodologia de veto */
+.methodology-banner {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+.banner-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #166534;
+  margin-bottom: 6px;
+}
+
+.methodology-list {
+  font-size: 0.76rem;
+  color: #15803d;
+  padding-left: 18px;
+  line-height: 1.45;
+}
+
+.methodology-list li {
+  margin-bottom: 4px;
 }
 
 /* Formularis */
@@ -225,6 +318,19 @@ h1 {
 .input-with-stepper input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.input-disabled-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-subtle);
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-md);
+  height: 42px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
 .stepper-btn {
@@ -315,8 +421,9 @@ textarea:focus {
 .textarea-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 14px;
+  gap: 12px;
   margin-top: 6px;
+  flex-wrap: wrap;
 }
 
 .text-link-btn {
@@ -484,6 +591,11 @@ textarea:focus {
   color: #991b1b;
 }
 
+.badge.info {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
 .results-toolbar {
   display: flex;
   gap: 8px;
@@ -519,6 +631,12 @@ textarea:focus {
   color: #3730a3;
 }
 
+.alert-success {
+  background: var(--success-light);
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
 /* Stats Cards */
 .stats-grid {
   display: grid;
@@ -543,17 +661,17 @@ textarea:focus {
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
   margin-top: 4px;
 }
 
-/* Graella de Taules */
+/* Graella de Taules / Grups */
 .tables-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
@@ -610,19 +728,111 @@ textarea:focus {
   color: #94a3b8;
 }
 
-/* Llista d'alumnes dins la taula */
+/* TARGETES DE GRUPS DE TREBALL (METODOLOGIA DE VETO) */
+.group-card {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+/* Estat: Provisional ⏳ */
+.group-card.provisional {
+  border-color: #cbd5e1;
+}
+
+.group-card.provisional .table-card-header {
+  background: #f8fafc;
+}
+
+/* Estat: Impugnat ❌ */
+.group-card.objected {
+  border-color: #f87171;
+  background: #fffafa;
+}
+
+.group-card.objected .table-card-header {
+  background: #fee2e2;
+  border-bottom-color: #fca5a5;
+}
+
+/* Estat: Definitiu / Confirmat 🔒 */
+.group-card.confirmed {
+  border-color: #86efac;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+}
+
+.group-card.confirmed .table-card-header {
+  background: #ecfdf5;
+  border-bottom-color: #bbf7d0;
+}
+
+/* Estat: Definitiu automàtic (100% vetos usats) 🔒 */
+.group-card.auto-confirmed {
+  border-color: #34d399;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.12);
+}
+
+.group-card.auto-confirmed .table-card-header {
+  background: #d1fae5;
+  border-bottom-color: #a7f3d0;
+}
+
+.group-status-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-provisional {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-objected {
+  background: #fee2e2;
+  color: #991b1b;
+  animation: pulse-border 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-border {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.badge-confirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-auto {
+  background: #a7f3d0;
+  color: #065f46;
+}
+
+/* Llista d'alumnes dins la taula / grup */
 .students-list {
   padding: 12px 14px;
   list-style: none;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .student-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   padding: 8px 10px;
   border-radius: var(--radius-sm);
@@ -635,6 +845,14 @@ textarea:focus {
 
 .student-item:hover {
   background: #edf2f7;
+}
+
+.student-info-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-grow: 1;
 }
 
 .student-index {
@@ -660,26 +878,90 @@ textarea:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   flex-shrink: 0;
 }
 
 .student-name {
   word-break: break-word;
-  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.empty-seat-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+/* Botó Veto / Desacord per alumne */
+.veto-btn {
+  background: #fff;
+  border: 1.5px solid #fca5a5;
+  color: #dc2626;
+  padding: 4px 9px;
   border-radius: var(--radius-sm);
-  border: 1px dashed #cbd5e1;
-  color: var(--text-subtle);
-  font-size: 0.82rem;
-  font-style: italic;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.veto-btn:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  transform: translateY(-1px);
+}
+
+.veto-used-pill {
+  background: #f1f5f9;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Footer de la targeta de grup */
+.group-card-footer {
+  padding: 10px 14px;
+  background: var(--bg-subtle);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-approve-group {
+  background: #ffffff;
+  border: 1.5px solid #86efac;
+  color: #166534;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-approve-group:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+}
+
+.group-footer-info {
+  font-size: 0.74rem;
+  color: var(--text-muted);
 }
 
 /* Estat buit inicial */
@@ -753,12 +1035,19 @@ textarea:focus {
     color: #000000;
   }
 
+  .tabs-nav,
   .config-panel,
   .app-header .header-actions,
   .results-toolbar,
   .app-footer,
-  .toast {
+  .toast,
+  .veto-btn,
+  .btn-approve-group {
     display: none !important;
+  }
+
+  .tab-content {
+    display: block !important;
   }
 
   .app-container {
@@ -782,10 +1071,12 @@ textarea:focus {
     gap: 16px;
   }
 
-  .table-card {
+  .table-card,
+  .group-card {
     border: 1.5px solid #000;
     page-break-inside: avoid;
     break-inside: avoid;
+    box-shadow: none;
   }
 
   .table-card-header {
