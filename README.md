@@ -2,6 +2,14 @@
 
 Aplicació web per a docents que permet gestionar la col·locació a l'aula i crear grups de treball de forma equitativa i participativa.
 
+## Assignatures Precarregades 📚
+
+L'aplicació compta amb botons de càrrega ràpida per a dues assignatures:
+1. 🤖 **Optativa Robòtica i digitalització** (18 alumnes)
+2. ⚙️ **Optativa de Tecnologia** (20 alumnes)
+
+Es poden carregar amb un sol clic tant a la capçalera de l'app com a sobre de cada camp d'alumnes.
+
 ## Funcionalitats
 
 ### 1. 🪑 Taules d'Aula (Distribució física)

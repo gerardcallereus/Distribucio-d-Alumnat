@@ -22,9 +22,15 @@
           </div>
         </div>
         <div class="header-actions">
-          <button id="btn-example" class="btn btn-secondary btn-sm" title="Carrega una llista d'exemple">
-            <span class="icon">✨</span> Carregar alumnes d'exemple
-          </button>
+          <div class="course-selector-wrapper">
+            <span class="course-selector-label">📚 Carregar assignatura:</span>
+            <button type="button" class="btn btn-course btn-sm" id="btn-load-robotica-header" title="Carrega Robòtica i digitalització (18 alumnes)">
+              🤖 Robòtica (18)
+            </button>
+            <button type="button" class="btn btn-course btn-sm" id="btn-load-tecnologia-header" title="Carrega Tecnologia (20 alumnes)">
+              ⚙️ Tecnologia (20)
+            </button>
+          </div>
         </div>
       </div>
 
@@ -72,7 +78,7 @@
                 </label>
                 <div class="input-with-stepper">
                   <button type="button" class="stepper-btn" onclick="stepValue('max-per-table', -1)">−</button>
-                  <input type="number" id="max-per-table" min="1" max="25" value="5" required>
+                  <input type="number" id="max-per-table" min="1" max="25" value="4" required>
                   <button type="button" class="stepper-btn" onclick="stepValue('max-per-table', 1)">+</button>
                 </div>
               </div>
@@ -81,10 +87,10 @@
             <div class="capacity-info-box" id="capacity-summary">
               <div class="info-item">
                 <span class="info-label">Capacitat total de l'aula:</span>
-                <span class="info-val" id="total-capacity-val">25 places</span>
+                <span class="info-val" id="total-capacity-val">20 places</span>
               </div>
               <div class="info-sub" id="capacity-feedback-hint">
-                5 taules × 5 alumnes màxim
+                5 taules × 4 alumnes màxim
               </div>
             </div>
 
@@ -95,6 +101,17 @@
                 </label>
                 <span class="students-counter" id="students-count-badge">0 alumnes</span>
               </div>
+
+              <div class="quick-course-bar">
+                <span class="quick-course-title">Carregar:</span>
+                <button type="button" class="chip-course-btn" onclick="loadCourseToTables('robotica')">
+                  🤖 Robòtica i digitalització (18)
+                </button>
+                <button type="button" class="chip-course-btn" onclick="loadCourseToTables('tecnologia')">
+                  ⚙️ Tecnologia (20)
+                </button>
+              </div>
+
               <textarea 
                 id="students-input" 
                 placeholder="Enganxa o escriu aquí els noms dels alumnes...&#10;Exemple:&#10;Marc Garcia&#10;Júlia Puig&#10;Pol Martí&#10;Laia Soler" 
@@ -193,7 +210,7 @@
             <div class="empty-state" id="empty-state">
               <div class="empty-icon">👥</div>
               <h3>Cap distribució calculada encara</h3>
-              <p>Introdueix els alumnes i fes clic al botó per generar la distribució automàtica.</p>
+              <p>Selecciona una assignatura a dalt o introdueix els alumnes per generar la distribució automàtica.</p>
             </div>
           </div>
         </section>
@@ -254,6 +271,17 @@
                 </label>
                 <span class="students-counter" id="groups-students-count-badge">0 alumnes</span>
               </div>
+
+              <div class="quick-course-bar">
+                <span class="quick-course-title">Carregar:</span>
+                <button type="button" class="chip-course-btn" onclick="loadCourseToGroups('robotica')">
+                  🤖 Robòtica i digitalització (18)
+                </button>
+                <button type="button" class="chip-course-btn" onclick="loadCourseToGroups('tecnologia')">
+                  ⚙️ Tecnologia (20)
+                </button>
+              </div>
+
               <textarea 
                 id="groups-students-input" 
                 placeholder="Enganxa aquí els alumnes per als grups de treball..." 

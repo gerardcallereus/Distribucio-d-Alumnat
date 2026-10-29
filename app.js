@@ -1,28 +1,61 @@
 // ============================================================
-// DADES D'EXEMPLE
+// DADES D'ASSIGNATURES PRECARREGADES
 // ============================================================
-const EXAMPLE_STUDENTS = [
-  "Aina Masferrer",
-  "Arnau Vila",
-  "Biel Rovira",
-  "Clara Pujol",
-  "David Solà",
-  "Emma Font",
-  "Ferran Martí",
-  "Gisela Bosch",
-  "Hugo Serrat",
-  "Júlia Casals",
-  "Laia Valls",
-  "Marc Puig",
-  "Marina Costa",
-  "Nil Oliver",
-  "Ona Domènech",
-  "Pau Riera",
-  "Queralt Serra",
-  "Roger Ferrer",
-  "Sara Alarcón",
-  "Víctor Camps"
-];
+const COURSES = {
+  robotica: {
+    name: "Optativa Robòtica i digitalització",
+    icon: "🤖",
+    students: [
+      "Sergi Carretero Romero",
+      "Ot Franch Vallejo",
+      "Oriol Griera",
+      "Víctor Guerrero Liro",
+      "Emil Martínez Aznar",
+      "Niko Montanaro Edo",
+      "Gerard Rodríguez Montes",
+      "Martí Sánchez Basco",
+      "Luis Turcios Ruiz",
+      "Akram Bader Bouziani",
+      "Arnau Cases",
+      "Tiago Colinas",
+      "Rovin Gangar",
+      "Izan Perez",
+      "Jan Sánchez",
+      "Claudia Delfino",
+      "Jordi Chavez",
+      "Bryan Acosta"
+    ]
+  },
+  tecnologia: {
+    name: "Optativa de Tecnologia",
+    icon: "⚙️",
+    students: [
+      "Gael Diez Huerto",
+      "Ot Franch Vallejo",
+      "Víctor Guerrero Liro",
+      "Naia Marin Nicodemus",
+      "Emil Martínez Aznar",
+      "Biel Martínez Poblet",
+      "Ammy Paipay López",
+      "Martí Sánchez Basco",
+      "Eloi Soriano Espín",
+      "Martin Acevedo Martín",
+      "Aran Bosque",
+      "Tiago Colinas",
+      "Salma Doukrane",
+      "David Fernandez",
+      "Ayman Khoulkha",
+      "Izan Perez",
+      "Miquel Pinyol",
+      "Jan Sánchez",
+      "Jordi Chavez",
+      "Bryan Acosta"
+    ]
+  }
+};
+
+// Dades d'exemple genèriques
+const EXAMPLE_STUDENTS = COURSES.robotica.students;
 
 // Utilitat d'escapat d'HTML
 function escapeHtml(text) {
@@ -102,7 +135,6 @@ function initTabs() {
       const groupsInput = document.getElementById('groups-students-input');
       groupsInput.value = text;
       updateWorkgroupsConfigPreview();
-      // Canviar a pestanya de grups
       document.getElementById('tab-btn-groups').click();
       showToast("📋 Llista d'alumnes copiada a la pestanya de grups");
     });
@@ -121,10 +153,36 @@ function initTabs() {
       showToast("📋 Llista importada correctament des de Taules");
     });
   }
+
+  // Botons de càrrega ràpida a la capçalera
+  const btnRoboticaHeader = document.getElementById('btn-load-robotica-header');
+  const btnTecnologiaHeader = document.getElementById('btn-load-tecnologia-header');
+
+  if (btnRoboticaHeader) {
+    btnRoboticaHeader.addEventListener('click', () => {
+      const isGroupsActive = document.getElementById('tab-groups').classList.contains('active');
+      if (isGroupsActive) {
+        window.loadCourseToGroups('robotica');
+      } else {
+        window.loadCourseToTables('robotica');
+      }
+    });
+  }
+
+  if (btnTecnologiaHeader) {
+    btnTecnologiaHeader.addEventListener('click', () => {
+      const isGroupsActive = document.getElementById('tab-groups').classList.contains('active');
+      if (isGroupsActive) {
+        window.loadCourseToGroups('tecnologia');
+      } else {
+        window.loadCourseToTables('tecnologia');
+      }
+    });
+  }
 }
 
 // ============================================================
-// PESTANYA 1: TAULES D'AULA (Eina existent)
+// PESTANYA 1: TAULES D'AULA (Eina clàssica)
 // ============================================================
 const tablesElements = {
   numTables: document.getElementById('num-tables'),
@@ -134,7 +192,6 @@ const tablesElements = {
   totalCapacityVal: document.getElementById('total-capacity-val'),
   capacityFeedbackHint: document.getElementById('capacity-feedback-hint'),
   btnDistribute: document.getElementById('btn-distribute'),
-  btnExample: document.getElementById('btn-example'),
   btnClearStudents: document.getElementById('btn-clear-students'),
   btnSortStudents: document.getElementById('btn-sort-students'),
   btnReshuffle: document.getElementById('btn-reshuffle'),
@@ -395,21 +452,18 @@ function copyTablesDistribution() {
   });
 }
 
-function loadExampleData() {
-  tablesElements.studentsInput.value = EXAMPLE_STUDENTS.join('\n');
+// Càrrega d'assignatura específica a Taules
+window.loadCourseToTables = function(courseKey) {
+  const course = COURSES[courseKey];
+  if (!course) return;
+
+  tablesElements.studentsInput.value = course.students.join('\n');
   tablesElements.numTables.value = 5;
   tablesElements.maxPerTable.value = 4;
   updateCapacitySummary();
   handleDistributeTables();
-
-  const groupsInput = document.getElementById('groups-students-input');
-  if (groupsInput && !groupsInput.value.trim()) {
-    groupsInput.value = EXAMPLE_STUDENTS.join('\n');
-    updateWorkgroupsConfigPreview();
-  }
-
-  showToast("✨ S'han carregat 20 alumnes d'exemple!");
-}
+  showToast(`📚 S'ha carregat ${course.name} (${course.students.length} alumnes)!`);
+};
 
 function initTablesEvents() {
   tablesElements.studentsInput.addEventListener('input', updateCapacitySummary);
@@ -417,7 +471,6 @@ function initTablesEvents() {
   tablesElements.maxPerTable.addEventListener('input', updateCapacitySummary);
 
   tablesElements.btnDistribute.addEventListener('click', handleDistributeTables);
-  tablesElements.btnExample.addEventListener('click', loadExampleData);
 
   tablesElements.btnClearStudents.addEventListener('click', () => {
     tablesElements.studentsInput.value = '';
@@ -450,9 +503,7 @@ function initTablesEvents() {
 // PESTANYA 2: GRUPS DE TREBALL (Metodologia de Veto i Consens)
 // ============================================================
 const workgroupsState = {
-  // Mapa de cada alumne: nom -> { name: string, hasObjected: boolean }
   studentsMap: new Map(),
-  // Array de grups: { id, name, status: 'provisional'|'confirmed'|'auto-confirmed'|'objected', students: Array<{name, hasObjected}> }
   groups: [],
   numGroups: 4,
   sessionActive: false
@@ -506,6 +557,18 @@ function updateWorkgroupsConfigPreview() {
   }
 }
 
+// Càrrega d'assignatura específica a Grups
+window.loadCourseToGroups = function(courseKey) {
+  const course = COURSES[courseKey];
+  if (!course) return;
+
+  groupsElements.groupsStudentsInput.value = course.students.join('\n');
+  groupsElements.numWorkgroups.value = 4;
+  updateWorkgroupsConfigPreview();
+  generateInitialWorkgroups();
+  showToast(`📚 S'ha carregat ${course.name} (${course.students.length} alumnes) als Grups!`);
+};
+
 // Inicialitza la sessió de grups de treball
 function generateInitialWorkgroups() {
   const studentNames = getCleanWorkgroupsStudents();
@@ -529,7 +592,6 @@ function generateInitialWorkgroups() {
     return;
   }
 
-  // Inicialització del mapa d'alumnes amb dret a veto intacte
   workgroupsState.studentsMap = new Map();
   studentNames.forEach(name => {
     workgroupsState.studentsMap.set(name, {
@@ -541,14 +603,12 @@ function generateInitialWorkgroups() {
   workgroupsState.numGroups = numGroups;
   workgroupsState.sessionActive = true;
 
-  // Barrejar llista d'alumnes inicial
   const shuffled = shuffleArray(studentNames);
 
-  // Repartiment equitatiu entre 'numGroups'
   const groups = Array.from({ length: numGroups }, (_, i) => ({
     id: i + 1,
     name: `Grup ${i + 1}`,
-    status: 'provisional', // 'provisional', 'confirmed', 'auto-confirmed', 'objected'
+    status: 'provisional',
     students: []
   }));
 
@@ -564,7 +624,6 @@ function generateInitialWorkgroups() {
     groups[i].students = groupStudents;
     currentIndex += count;
 
-    // Comprovar si aquest grup té el 100% de membres amb veto usat
     checkAutoConfirmed(groups[i]);
   }
 
@@ -573,7 +632,6 @@ function generateInitialWorkgroups() {
   showToast("🚀 Grups inicials generats! Comença la ronda de consens.");
 }
 
-// Comprova si tots els membres del grup ja han gastat el seu dret a veto
 function checkAutoConfirmed(group) {
   if (group.students.length === 0) return false;
   const allUsed = group.students.every(s => s.hasObjected);
@@ -584,7 +642,6 @@ function checkAutoConfirmed(group) {
   return false;
 }
 
-// Acció de Votar en contra (exercir el veto)
 window.handleStudentVeto = function(groupId, studentName) {
   const group = workgroupsState.groups.find(g => g.id === groupId);
   if (!group) return;
@@ -597,24 +654,17 @@ window.handleStudentVeto = function(groupId, studentName) {
     return;
   }
 
-  // Marcar veto com a consumit
   student.hasObjected = true;
-  // Actualitzar l'objecte dins del grup
   const studentInGroup = group.students.find(s => s.name === studentName);
   if (studentInGroup) {
     studentInGroup.hasObjected = true;
   }
 
-  // Impugnar aquest grup
   group.status = 'objected';
-
-  // Mostrar Toast
   showToast(`✋ En/Na ${studentName} ha votat en contra! El ${group.name} s'ha d'impugnar.`);
-
   renderWorkgroups();
 };
 
-// Aprovar un grup individual provisional
 window.handleApproveGroup = function(groupId) {
   const group = workgroupsState.groups.find(g => g.id === groupId);
   if (!group) return;
@@ -629,7 +679,6 @@ window.handleApproveGroup = function(groupId) {
   renderWorkgroups();
 };
 
-// Aprovar tots els grups provisionals que no tenen queixes
 function approveAllProvisionals() {
   let count = 0;
   workgroupsState.groups.forEach(group => {
@@ -648,7 +697,6 @@ function approveAllProvisionals() {
   renderWorkgroups();
 }
 
-// Redistribuir els grups impugnats
 function redistributeObjectedGroups() {
   const objectedGroups = workgroupsState.groups.filter(g => g.status === 'objected');
 
@@ -657,16 +705,13 @@ function redistributeObjectedGroups() {
     return;
   }
 
-  // Recollir tots els membres dels grups impugnats
   let pool = [];
   objectedGroups.forEach(g => {
     pool.push(...g.students);
   });
 
-  // Barrejar membres impugnats
   const shuffledPool = shuffleArray(pool);
 
-  // Repartir equitativament entre els mateixos grups impugnats
   const numObj = objectedGroups.length;
   const base = Math.floor(shuffledPool.length / numObj);
   const remainder = shuffledPool.length % numObj;
@@ -677,7 +722,6 @@ function redistributeObjectedGroups() {
     group.students = shuffledPool.slice(currentIndex, currentIndex + count);
     currentIndex += count;
 
-    // Regla clau: si un nou grup està format 100% per alumnes amb veto esgotat -> DEFINITIU AUTOMÀTIC!
     const isAuto = checkAutoConfirmed(group);
     if (!isAuto) {
       group.status = 'provisional';
@@ -688,7 +732,6 @@ function redistributeObjectedGroups() {
   showToast(`🔄 S'han redistribuït els membres de ${numObj} ${numObj === 1 ? 'grup' : 'grups'} impugnats.`);
 }
 
-// Reiniciar sessió de grups de treball
 function resetWorkgroups() {
   if (confirm("Vols reiniciar la sessió de grups de treball des de zero? Es restabliran els vetos i els grups.")) {
     workgroupsState.groups = [];
@@ -715,7 +758,6 @@ function resetWorkgroups() {
   }
 }
 
-// Renderitzar tot el tauler de grups de treball
 function renderWorkgroups() {
   const groups = workgroupsState.groups;
   if (!groups || groups.length === 0) return;
@@ -723,7 +765,6 @@ function renderWorkgroups() {
   groupsElements.workgroupsToolbar.style.display = 'flex';
   groupsElements.workgroupsStatsGrid.style.display = 'grid';
 
-  // Comptadors d'estat
   const confirmedCount = groups.filter(g => g.status === 'confirmed' || g.status === 'auto-confirmed').length;
   const provisionalCount = groups.filter(g => g.status === 'provisional').length;
   const objectedCount = groups.filter(g => g.status === 'objected').length;
@@ -738,7 +779,6 @@ function renderWorkgroups() {
   groupsElements.statObjectedGroups.textContent = objectedCount;
   groupsElements.statUsedVetoes.textContent = `${usedVetoes} / ${workgroupsState.studentsMap.size}`;
 
-  // Botó de redistribució
   if (objectedCount > 0) {
     groupsElements.btnRedistributeObjected.style.display = 'inline-flex';
     groupsElements.countObjectedGroups.textContent = objectedCount;
@@ -746,9 +786,7 @@ function renderWorkgroups() {
     groupsElements.btnRedistributeObjected.style.display = 'none';
   }
 
-  // Estat global i missatges
   if (confirmedCount === groups.length) {
-    // Tots completats!
     groupsElements.workgroupsAlert.className = 'alert alert-success';
     groupsElements.workgroupsAlert.style.display = 'flex';
     groupsElements.workgroupsAlert.innerHTML = `
@@ -786,14 +824,12 @@ function renderWorkgroups() {
     groupsElements.workgroupsMetaText.textContent = `${confirmedCount} definitius, ${provisionalCount} provisionals pendents de consens.`;
   }
 
-  // Renderitzar la graella de targetes de grup
   groupsElements.workgroupsContainer.innerHTML = '';
 
   groups.forEach(group => {
     const card = document.createElement('div');
     card.className = `group-card ${group.status}`;
 
-    // Badge d'estat
     let badgeHtml = '';
     let headerIcon = '🤝';
     if (group.status === 'confirmed') {
@@ -820,7 +856,6 @@ function renderWorkgroups() {
       <ul class="students-list">
     `;
 
-    // Llista d'alumnes
     group.students.forEach((student, idx) => {
       const initials = student.name
         .split(' ')
@@ -829,10 +864,8 @@ function renderWorkgroups() {
         .join('')
         .toUpperCase();
 
-      // Botó de veto o pill de veto gastat
       let actionHtml = '';
       if (group.status === 'confirmed' || group.status === 'auto-confirmed') {
-        // En grup confirmat, només mostrem si tenia el veto gastat o no
         actionHtml = student.hasObjected 
           ? `<span class="veto-used-pill">⛔ Veto gastat</span>` 
           : `<span class="veto-used-pill" style="color:#059669; background:#ecfdf5;">✔️ Acceptat</span>`;
@@ -841,11 +874,9 @@ function renderWorkgroups() {
           ? `<span class="veto-used-pill" style="color:#dc2626; background:#fee2e2;">✋ S'ha oposat</span>`
           : `<span class="veto-used-pill">Esperant redistribució</span>`;
       } else {
-        // Grup provisional
         if (student.hasObjected) {
           actionHtml = `<span class="veto-used-pill">⛔ Veto gastat</span>`;
         } else {
-          // Botó actiu per votar en contra
           actionHtml = `
             <button type="button" class="veto-btn" onclick="handleStudentVeto(${group.id}, '${escapeHtml(student.name).replace(/'/g, "\\'")}')" title="Exercir el teu únic dret a vot en contra d'aquest grup">
               ✋ En desacord
@@ -870,7 +901,6 @@ function renderWorkgroups() {
 
     html += `</ul>`;
 
-    // Footer de targeta: Botó d'aprovació si és provisional
     let footerHtml = '';
     if (group.status === 'provisional') {
       footerHtml = `
@@ -970,6 +1000,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initTablesEvents();
   initWorkgroupsEvents();
 
-  updateCapacitySummary();
+  // Carregar per defecte Robòtica a Taules i Grups
+  window.loadCourseToTables('robotica');
+  groupsElements.groupsStudentsInput.value = COURSES.robotica.students.join('\n');
   updateWorkgroupsConfigPreview();
 });
